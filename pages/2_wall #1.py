@@ -369,7 +369,6 @@ if st.session_state.irr_or_sol == "Calculate Tsol using irridation":
             TsolairNO1 = T_hourly + Et * 0.045
         if Surface_colorNO1 == surface_color[1]:
             TsolairNO1 = T_hourly + Et * 0.09
-    st.write(Et)
 
     # Irridation = st.session_state.Irridation
 elif st.session_state.irr_or_sol == "Enter Tsol values manually":
