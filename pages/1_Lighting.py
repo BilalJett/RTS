@@ -102,7 +102,7 @@ Temps = pd.DataFrame({
 })
 Temps.index = Temps.index +1
 st.write(Temps)
-st.area_chart(data=Temps,x_label="Time (h)",y_label=f"Load {st.session_state.heat}")
+st.line_chart(data=Temps,x_label="Time (h)",y_label=f"Load {st.session_state.heat}")
 if "Qlighting" not in st.session_state:
     st.session_state["Qlighting"] = np.zeros(24)
 st.session_state.Qlighting = Qlighting

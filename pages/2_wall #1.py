@@ -504,19 +504,19 @@ total_room = pd.DataFrame({
 total_room.index = total_room.index+1
 
 st.subheader("Hourly and Solair Temperatures")
-st.area_chart(data=Temps,x_label="Time (h)",y_label=f"Temperature {st.session_state.temp}")
+st.line_chart(data=Temps,x_label="Time (h)",y_label=f"Temperature {st.session_state.temp}")
 st.subheader("Solar irradiation on wall")
 st.write(data)
 st.subheader("cooling load from wall")
 st.write(Qs)
-st.area_chart(data=Qs,x_label="Time (h)",y_label=f"Load {st.session_state.heat}")
+st.line_chart(data=Qs,x_label="Time (h)",y_label=f"Load {st.session_state.heat}")
 
 st.subheader("Heat gain from window")
 st.write(datawindow)
-st.area_chart(data=datawindow,x_label="Time (h)",y_label=f"Load {st.session_state.heat}")
+st.line_chart(data=datawindow,x_label="Time (h)",y_label=f"Load {st.session_state.heat}")
 
 st.subheader("Total Cooling Load Wall #1")
-st.area_chart(data=total_room,x_label="Time (h)",y_label=f"Load {st.session_state.heat}")
+st.line_chart(data=total_room,x_label="Time (h)",y_label=f"Load {st.session_state.heat}")
 
 if "total_roomNO1" not in st.session_state:
     st.session_state["total_roomNO1"] = np.zeros(24)

@@ -58,13 +58,13 @@ Temps.index = Temps.index + 1
 # total_room.index = total_room.index+1
 
 st.subheader("Solair Temperatures")
-st.area_chart(data=Temps)
+st.line_chart(data=Temps,)
 # st.subheader("Solar irradiation on Roof")
 # st.write(data)
 # st.subheader("cooling load from Roof")
 # st.write(Qs)
-# st.area_chart(data=Qs)
+# st.line_chart(data=Qs)
 
 st.subheader("Total heat gain")
 st.write(datawindow)
-st.area_chart(data=datawindow)
+st.line_chart(data=datawindow,)
