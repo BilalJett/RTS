@@ -187,6 +187,7 @@ gammaaNO1 = np.zeros(24)
 ED = np.zeros(24)
 Ed = np.zeros(24)
 Er = np.zeros(24)
+m=np.zeros(24)
 Y=np.zeros(24)
 taub =  st.session_state["taub"]
 taud =  st.session_state["taud"]
@@ -335,7 +336,10 @@ phi =  np.arccos((np.sin((beta))*np.sin(np.radians(Latitude)) - np.sin(np.radian
 phi[0:12]=-phi[0:12]
 g = abs(np.degrees(phi)-gammaaNO1)
 incident_angle = np.arccos(np.cos(beta)* np.cos(np.radians(g)))
-m = 1/(np.sin(beta)+0.50572*((6.07995+np.degrees(beta))**(-1.6364)))
+for e,i in enumerate(beta):
+    if np.degrees(beta[e])<0:
+        m[e]=None
+    else:m[e] = 1/(np.sin(beta[e])+0.50572*((6.07995+(np.degrees(beta[e])))**(-1.6364)))
 ab = 1.454-0.406 * st.session_state.taub - 0.268 * st.session_state.taud + 0.021*st.session_state.taud * st.session_state.taub
 Eb = Solar_const * np.exp(-taub*(m**ab))
 ED = Eb*np.cos(incident_angle)
@@ -354,7 +358,10 @@ Et = ED + Etd + Er
 
 #Calculating Tsolair ()
 c = st.columns(4)
-T_hourly = T_design - percentage_of_daily_range * daily_range / 100
+if st.session_state.precise_DR == True:
+    T_hourly = st.session_state.Temp24
+else:
+    T_hourly = T_design - percentage_of_daily_range * daily_range / 100
 if st.session_state.irr_or_sol == "Calculate Tsol using irridation":
     for i in range(len(Et)):
         if np.isnan(Et[i]):
@@ -366,9 +373,9 @@ if st.session_state.irr_or_sol == "Calculate Tsol using irridation":
             TsolairNO1 = T_hourly + Et * 0.30
     else:
         if Surface_colorNO1 == surface_color[0]:
-            TsolairNO1 = T_hourly + Et * 0.045
+            TsolairNO1 = T_hourly + Et * 0.02655
         if Surface_colorNO1 == surface_color[1]:
-            TsolairNO1 = T_hourly + Et * 0.09
+            TsolairNO1 = T_hourly + Et * 0.05310
 
     # Irridation = st.session_state.Irridation
 elif st.session_state.irr_or_sol == "Enter Tsol values manually":
@@ -392,7 +399,6 @@ for i, e in enumerate(Qrn):
 
 Qwall = Qcn + Qrn
 st.divider()
-
 #UI (Window)
 st.subheader("Window")
 col1,col2 = st.columns(2)
@@ -410,7 +416,6 @@ if "Ufactor_windowNO1" not in st.session_state:
     st.session_state["Ufactor_windowNO1"] = 0.6
 Ufactor_windowNO1 = col1.number_input(f" The overall heat transfer coefficient for the window {st.session_state.U}", value=float(st.session_state["Ufactor_windowNO1"]),format="%.4f")
 st.session_state.Ufactor_windowNO1 = Ufactor_windowNO1
-
 #Calculating Q (for window)
 def interpolate_SHGC(angle,key):
     angles = (0.0,40.0,50.0,60.0,70.0,80.0)
@@ -439,12 +444,9 @@ def interpolate_SHGC(angle,key):
     # print(val, smin,smax, min_angle,max_angle, angle)
     print(SHGC[key])
     return val
-if st.session_state.precise_DR == True:
-    T_hourly = st.session_state.Temp24
-    Qwcn = Ufactor_windowNO1 * area_of_WindowNO1 * (T_hourly - T_indoor)
-else:
-    T_hourly = T_design - percentage_of_daily_range * daily_range / 100
-    Qwcn = Ufactor_windowNO1 * area_of_WindowNO1 * (T_hourly- T_indoor)
+
+Qwcn = Ufactor_windowNO1 * area_of_WindowNO1 * (T_hourly - T_indoor)
+# Qwcn = Ufactor_windowNO1 * area_of_WindowNO1 * (T_hourly- T_indoor)
 for e,i in enumerate(Qwbn):
     print(e+1)
     Qwbn[e] = ED[e] * area_of_WindowNO1 * interpolate_SHGC(np.degrees(incident_angle[e]),window_typeNO1)
@@ -458,27 +460,11 @@ Qwdn = np.nan_to_num(Qwdn,nan=0.0)
 #Graphing
 st.divider()
 st.subheader("Graphs and Tables")
-
-datawindow = pd.DataFrame({
-    f"Q Window Conduction  {st.session_state.heat}":Qwcn,
-    f"Q Window Direct Beam heat gain {st.session_state.heat}":Qwbn,
-    f"Q Window Diffuse heat gain {st.session_state.heat}":Qwdn,
-    f"Total Window heat gain {st.session_state.heat}":Qwcn + Qwbn + Qwdn,
-})
-datawindow.index =datawindow.index+1
-
 Temps = pd.DataFrame({
     f"T hourly {st.session_state.temp}":T_hourly,
     f"Tsol {st.session_state.temp}": TsolairNO1,
 })
 Temps.index = Temps.index + 1
-
-Qs = pd.DataFrame({
-    f"Q convection {st.session_state.heat}":Qcn,
-    f"Q Radiation {st.session_state.heat}":Qrn,
-    f"Q total {st.session_state.heat}": Qwall,
-})
-Qs.index = Qs.index +1
 
 data=pd.DataFrame({
     "Apparent Solar Time (h)":AST,
@@ -498,8 +484,23 @@ data=pd.DataFrame({
 })
 data.index = data.index +1
 
+Qs = pd.DataFrame({
+    f"Q convection {st.session_state.heat}":Qcn,
+    f"Q Radiation {st.session_state.heat}":Qrn,
+    f"Q total {st.session_state.heat}": Qwall,
+})
+Qs.index = Qs.index +1
+
+datawindow = pd.DataFrame({
+    f"Q Window Conduction  {st.session_state.heat}":Qwcn,
+    f"Q Window Direct Beam heat gain {st.session_state.heat}":Qwbn,
+    f"Q Window Diffuse heat gain {st.session_state.heat}":Qwdn,
+    f"Total Window heat gain {st.session_state.heat}":Qwcn + Qwbn + Qwdn,
+})
+datawindow.index =datawindow.index+1
+total =  Qcn + Qrn + Qwcn + Qwbn + Qwdn
 total_room = pd.DataFrame({
-    f"Total cooling load from wall {st.session_state.heat} " : Qwall + Qwcn + Qwbn + Qwdn
+    f"Total cooling load from wall {st.session_state.heat} " : total
 })
 total_room.index = total_room.index+1
 
@@ -518,6 +519,9 @@ st.line_chart(data=datawindow,x_label="Time (h)",y_label=f"Load {st.session_stat
 st.subheader("Total Cooling Load Wall #1")
 st.line_chart(data=total_room,x_label="Time (h)",y_label=f"Load {st.session_state.heat}")
 
-if "total_roomNO1" not in st.session_state:
-    st.session_state["total_roomNO1"] = np.zeros(24)
-st.session_state.totalNO1=total_room
+
+st.session_state["totalNO1"] = total_room
+st.session_state["datatempNO1"] = Temps
+st.session_state["datadataNO1"] = data
+st.session_state["dataqaNO1"] = Qs
+st.session_state["dataWNO1"] = datawindow

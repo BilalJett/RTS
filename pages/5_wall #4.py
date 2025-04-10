@@ -169,7 +169,7 @@ construction_types_non_solar = ("Light (with carpet 10%)",
     "Heavy Interior zone with carpet",
     "Heavy Interior zone no carpet",)
 all = walls
-surface_color = ("Light Colored Surface, α/ho = 0.15","Dark Colored Surface, α/ho = 0.30")
+surface_color = ("Light Colored Surface","Dark Colored Surface")
 
 #Qs
 Qn = np.zeros(24)
@@ -188,6 +188,7 @@ ED = np.zeros(24)
 Ed = np.zeros(24)
 Er = np.zeros(24)
 Y=np.zeros(24)
+m=np.zeros(24)
 taub =  st.session_state["taub"]
 taud =  st.session_state["taud"]
 ground_reflectance =  st.session_state["ground_reflectance"]
@@ -295,7 +296,7 @@ Ufactor_wallNO4 = column1.number_input(f" The overall heat transfer coefficient 
 st.session_state.Ufactor_wallNO4 = Ufactor_wallNO4
 
 if "Surface_colorNO4" not in st.session_state:
-    st.session_state["Surface_colorNO4"] = "Light Colored Surface, α/ho = 0.15"
+    st.session_state["Surface_colorNO4"] = "Light Colored Surface"
 Surface_colorNO4 = column2.selectbox("Surface Color",surface_color,
                                   index=surface_color.index(st.session_state["Surface_colorNO4"]))
 st.session_state.Surface_colorNO4 = Surface_colorNO4
@@ -335,7 +336,10 @@ phi =  np.arccos((np.sin((beta))*np.sin(np.radians(Latitude)) - np.sin(np.radian
 phi[0:12]=-phi[0:12]
 g = abs(np.degrees(phi)-gammaaNO4)
 incident_angle = np.arccos(np.cos(beta)* np.cos(np.radians(g)))
-m = 1/(np.sin(beta)+0.50572*((6.07995+np.degrees(beta))**(-1.6364)))
+for e,i in enumerate(beta):
+    if np.degrees(beta[e])<0:
+        m[e]=None
+    else:m[e] = 1/(np.sin(beta[e])+0.50572*((6.07995+(np.degrees(beta[e])))**(-1.6364)))
 ab = 1.454-0.406 * st.session_state.taub - 0.268 * st.session_state.taud + 0.021*st.session_state.taud * st.session_state.taub
 Eb = Solar_const * np.exp(-taub*(m**ab))
 ED = Eb*np.cos(incident_angle)
@@ -354,16 +358,24 @@ Et = ED + Etd + Er
 
 #Calculating Tsolair ()
 c = st.columns(4)
-T_hourly = T_design - percentage_of_daily_range * daily_range / 100
+if st.session_state.precise_DR == True:
+    T_hourly = st.session_state.Temp24
+else:
+    T_hourly = T_design - percentage_of_daily_range * daily_range / 100
 if st.session_state.irr_or_sol == "Calculate Tsol using irridation":
     for i in range(len(Et)):
         if np.isnan(Et[i]):
             Et[i] = 0
-    if Surface_colorNO4 == surface_color[0]:
-        TsolairNO4 = T_hourly + Et * 0.15
-    if Surface_colorNO4 == surface_color[1]:
-        TsolairNO4 = T_hourly + Et * 0.30
-    # Irridation = st.session_state.Irridation
+    if st.session_state.preferredscale == "Imperial system":
+        if Surface_colorNO4 == surface_color[0]:
+            TsolairNO4 = T_hourly + Et * 0.15
+        if Surface_colorNO4 == surface_color[1]:
+            TsolairNO4 = T_hourly + Et * 0.30
+    else:
+        if Surface_colorNO4 == surface_color[0]:
+            TsolairNO4 = T_hourly + Et * 0.02655
+        if Surface_colorNO4 == surface_color[1]:
+            TsolairNO4 = T_hourly + Et * 0.05310
 
 elif st.session_state.irr_or_sol == "Enter Tsol values manually":
     if "TsolairNO4" not in st.session_state:
@@ -432,12 +444,7 @@ def interpolate_SHGC(angle,key):
     # print(val, smin,smax, min_angle,max_angle, angle)
     print(SHGC[key])
     return val
-if st.session_state.precise_DR == True:
-    T_hourly = st.session_state.Temp24
-    Qwcn = Ufactor_windowNO4 * area_of_WindowNO4 * (T_hourly - T_indoor)
-else:
-    T_hourly = T_design - percentage_of_daily_range * daily_range / 100
-    Qwcn = Ufactor_windowNO4 * area_of_WindowNO4 * (T_hourly- T_indoor)
+Qwcn = Ufactor_windowNO4 * area_of_WindowNO4 * (T_hourly- T_indoor)
 for e,i in enumerate(Qwbn):
     print(e+1)
     Qwbn[e] = ED[e] * area_of_WindowNO4 * interpolate_SHGC(np.degrees(incident_angle[e]),window_typeNO4)
@@ -490,9 +497,10 @@ data=pd.DataFrame({
     f"Total Surface irradiation  {st.session_state.irridation}" : Et
 })
 data.index = data.index +1
+total =  Qcn + Qrn + Qwcn + Qwbn + Qwdn
 
 total_room = pd.DataFrame({
-    f"Total cooling load from wall {st.session_state.heat} " : Qwall + Qwcn + Qwbn + Qwdn
+    f"Total cooling load from wall {st.session_state.heat} " :total
 })
 total_room.index = total_room.index+1
 
@@ -512,6 +520,8 @@ st.subheader("Total Cooling Load Wall #4")
 st.line_chart(data=total_room,x_label="Time (h)",y_label=f"Load {st.session_state.heat}",)
 
 
-if "total_roomNO4" not in st.session_state:
-    st.session_state["total_roomNO4"] = np.zeros(24)
-st.session_state.totalNO4=total_room
+st.session_state["totalNO4"] = total_room
+st.session_state["datatempNO4"] = Temps
+st.session_state["datadataNO4"] = data
+st.session_state["dataqaNO4"] = Qs
+st.session_state["dataWNO4"] = datawindow

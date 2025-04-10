@@ -63,8 +63,8 @@ light_wattage = column1.number_input(f" Lights wattage (W)", value=st.session_st
 st.session_state.light_wattage = light_wattage
 
 if "light_allowance" not in st.session_state:
-    st.session_state["light_allowance"] = 0
-light_allowance = column2.number_input(f" Lights Allowance Factor", value=st.session_state["light_allowance"])
+    st.session_state["light_allowance"] = 0.0
+light_allowance = column2.number_input(f" Lights Allowance Factor", value=float(st.session_state["light_allowance"]),format="%.2f",min_value=0.0,max_value=1.0)
 st.session_state.light_allowance = light_allowance
 
 if "lights_on" not in st.session_state:
@@ -81,14 +81,13 @@ lights_use_factor = np.zeros(24)
 lights_use_factor[st.session_state["lights_on"]:st.session_state["lights_off"]] = 1
 if st.session_state.preferredscale == "Metric system":
     Qn_hour = lights_Wattage * lights_use_factor * Speical_Allowace_factor
-else: Qn_hour = lights_Wattage * lights_use_factor * Speical_Allowace_factor *3.41
+else: Qn_hour = lights_Wattage * lights_use_factor * Speical_Allowace_factor * 3.41
 
 lighting_conv = 0.43 * Qn_hour
 for i in range(24):
     lighting_rad[i]= np.sum(
         np.array(RTS_NONSOLAR[construction_types_non_solar.index(st.session_state.construction_types_non_solar)])/100
-        * np.concatenate([Qn_hour[i-1::-1], Qn_hour[23:i-1:-1]])) * 0.57
-
+        * np.concatenate([Qn_hour[i+1::-1], Qn_hour[23:i+1:-1]])) * 0.57
 # # concatrenate is quite important and it will be used allot it this code, it basically join two array so I joined
 # the two cut arrays togother. im thankful that I wont be graded on the cleanness of the code... hell yeah
 Qlighting = lighting_conv + lighting_rad
@@ -106,3 +105,4 @@ st.line_chart(data=Temps,x_label="Time (h)",y_label=f"Load {st.session_state.hea
 if "Qlighting" not in st.session_state:
     st.session_state["Qlighting"] = np.zeros(24)
 st.session_state.Qlighting = Qlighting
+st.session_state["datalight"] = Temps

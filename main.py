@@ -46,14 +46,6 @@ construction_types_non_solar = ("Light (with carpet 10%)",
 st.session_state.percentage_of_daily_range = np.array(
     [87, 92, 96, 99, 100, 98, 93, 84, 71, 56, 39, 23, 11, 3, 0, 3, 10, 21, 34, 47, 58, 68, 76, 82])
 
-#TODO 1- make the total page
-#TODO 2- make as much graphs as possible -DONE
-#TODO 3- Check other TODOs - DONE
-#TODO 4- Make sure roof calculations are correct
-#TODO 5- add the 3 other walls - DONE
-#TODO 6- give each Table and graph a name or title - DONE
-#TODO 7- label the graphs (1)
-#TODO 8- Do Extensive tests
 
 st.title("Calculating Cooling load using Radiant Time Series Method (RTSM)")
 st.divider()
@@ -85,12 +77,12 @@ column1, column2 = st.columns(2)
 
 if "Latitude" not in st.session_state:
     st.session_state["Latitude"] = 33.27
-Latitude = column1.number_input(f"Latitude (°)", value=float(st.session_state["Latitude"]),min_value=-90.0,max_value=90.0)
+Latitude = column1.number_input(f"Latitude (°)", value=float(st.session_state["Latitude"]),min_value=-90.0,max_value=90.0,format="%.3f")
 st.session_state.Latitude = Latitude
 
 if "Longitude" not in st.session_state:
     st.session_state["Longitude"] = 44.23
-Longitude = column2.number_input(f"Longitude (°)", value=float(st.session_state["Longitude"]),min_value=-180.0,max_value=180.0)
+Longitude = column2.number_input(f"Longitude (°)", value=float(st.session_state["Longitude"]),min_value=-180.0,max_value=180.0,format="%.3f")
 st.session_state.Longitude = Longitude
 
 if "ET" not in st.session_state:
@@ -100,7 +92,7 @@ st.session_state.ET = ET
 
 if "LSM" not in st.session_state:
     st.session_state["LSM"] = 45
-LSM = column2.number_input("Local Standard Meridian (°)", value=float(st.session_state["LSM"]),min_value=-180.0 ,max_value=180.0)
+LSM = column2.number_input("Local Standard Meridian (°)", value=float(st.session_state["LSM"]),min_value=-180.0 ,max_value=180.0,format="%.3f")
 st.session_state.LSM = LSM
 
 if "delta" not in st.session_state:
@@ -206,4 +198,15 @@ st.session_state.TsolairNO2 = np.zeros(24)
 st.session_state.TsolairNO3 = np.zeros(24)
 st.session_state.TsolairNO4 = np.zeros(24)
 st.session_state.TsolairROOF = np.zeros(24)
-
+if "total_roomNO1" not in st.session_state:
+    st.session_state["total_roomNO1"] = np.zeros(24)
+if "total_roomNO2" not in st.session_state:
+    st.session_state["total_roomNO2"] = np.zeros(24)
+if "total_roomNO3" not in st.session_state:
+    st.session_state["total_roomNO3"] = np.zeros(24)
+if "total_roomNO4" not in st.session_state:
+    st.session_state["total_roomNO4"] = np.zeros(24)
+if "total_roomROOF" not in st.session_state:
+    st.session_state["total_roomROOF"] = np.zeros(24)
+if "Qlighting" not in st.session_state:
+    st.session_state["Qlighting"] = np.zeros(24)
