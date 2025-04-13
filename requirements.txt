@@ -1,0 +1,4 @@
+matplotlib
+reportlab
+pandas
+streamlit
