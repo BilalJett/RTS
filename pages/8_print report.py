@@ -7,8 +7,8 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet,ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from reportlab.lib.colors import black, HexColor
-import os
 import tempfile
+import numpy as np
 
 #importing data
 defualtuseless =pd.DataFrame()
@@ -37,6 +37,14 @@ if "dataWROOF" not in st.session_state:
 if "datalight" not in st.session_state:
     st.session_state["datalight"] = defualtuseless
 
+totaltotaltotal = np.array(np.nan_to_num(st.session_state["totalNO1"],nan=0)+
+          np.nan_to_num(st.session_state["totalNO2"],nan=0)+
+          np.nan_to_num(st.session_state["totalNO3"],nan=0)+
+          np.nan_to_num(st.session_state["totalNO4"],nan=0)+
+          np.nan_to_num(st.session_state["total_roomROOF"],nan=0)+
+          np.nan_to_num(st.session_state["datalight"],nan=0))
+totaltotaltotal = totaltotaltotal[:, 0]
+totaltotaltotal = pd.DataFrame(totaltotaltotal)
 #setting some functions
 def PandasToTable(dataframe):
     styles = getSampleStyleSheet()
@@ -141,7 +149,10 @@ layout = [
     Paragraph("It does the Calculations based on the ASHRAE's approach on the Radiant Time Series Method by splitting the loads to convection load and radiation"
               " loads, then processing them sepeartly by accounting for the last 24 hours heat gains and applying the appropiate coefficients based on things like the consrcution level."),
     Spacer(10,12),
-    Paragraph("add more text here later "),
+    Paragraph("The program was written in Python, with the addition of some essential libraries like Numpy, Pandas,Matplotlib and Streamlit for the UI"),
+    Spacer(10, 12),
+    Paragraph(
+        "This is the first version, the code can be further improved by adding more user control, hopefully I will add more features in futrure releases"),
     PageBreak(),
     Paragraph("Cooling Load Calculation Using RTSM", styles["Title"]),
 ]
@@ -185,7 +196,6 @@ def addrooftopdf():
     layout.append(Paragraph("Solar Angles and Radiation on roof", header_style))
     layout.append(Table(PandasToTable(st.session_state[f"datadataROOF"].round(2)), colWidths=40, rowHeights=row_heights,
                         style=stlye_of_table))
-    print("passed")
     layout.append(Spacer(1, 12))
     layout.append(Table(RoofInfoTable(), style=stlye_of_table, rowHeights=20))
     layout.append(HRFlowable(width="100%", thickness=1, color="black", spaceBefore=5, spaceAfter=5))
@@ -215,12 +225,29 @@ def addrooftopdf():
     layout.append(HRFlowable(width="100%", thickness=1, color="black", spaceBefore=10, spaceAfter=10))
     layout.append(PageBreak())
 
+
 try:
     Addwalltopdf(1)
     Addwalltopdf(2)
     Addwalltopdf(3)
     Addwalltopdf(4)
     addrooftopdf()
+    layout.append(Paragraph("Lighting", title_style))
+    layout.append(HRFlowable(width="100%", thickness=1, color="black", spaceBefore=10, spaceAfter=10))
+    layout.append(Spacer(1, 12))
+    layout.append(
+        Image(PandasToGraph(st.session_state["datalight"], "Lights cooling load", "Time", f"Load{st.session_state.heat}"), width=350,
+              height=250))
+    layout.append(Spacer(1, 12))
+    layout.append(HRFlowable(width="100%", thickness=1, color="black", spaceBefore=10, spaceAfter=10))
+    layout.append(Paragraph("Total Cooling Load", title_style))
+    layout.append(HRFlowable(width="100%", thickness=1, color="black", spaceBefore=10, spaceAfter=10))
+    layout.append(Spacer(1, 12))
+    layout.append(
+        Image(PandasToGraph(totaltotaltotal, "Total room cooling load", "Time", f"Load{st.session_state.heat}"), width=350,
+              height=250))
+    layout.append(Spacer(1, 12))
+
     doc.build(layout)
     with open(file_name, "rb") as f:
         st.download_button(
@@ -229,4 +256,5 @@ try:
             file_name="Cooling_Load_Report.pdf",
             mime="application/pdf"
         )
+
 except:st.write("Failed to make pdf report, Make sure you filled all the info in the previous page\n if you intend to leave some pages blank then just visit the page then leave it.")

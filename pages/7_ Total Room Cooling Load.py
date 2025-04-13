@@ -167,6 +167,7 @@ try:
               np.nan_to_num(st.session_state["totalNO4"],nan=0)+
               np.nan_to_num(st.session_state["total_roomROOF"],nan=0)+
               np.nan_to_num(st.session_state["datalight"],nan=0))
+    totaltotaltotal = totaltotaltotal[:, 0]
     st.line_chart(data=totaltotaltotal,x_label="Time (h)",y_label=f"Load {st.session_state.heat}")
 except:
         pass
