@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="331c9e91-09e4-4c08-bb39-e254c476fc47" name="Changes" comment="plz help. V6">
+    <list default="true" id="331c9e91-09e4-4c08-bb39-e254c476fc47" name="Changes" comment="plz help. V6.1">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/8_print report.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/8_print report.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -222,7 +223,14 @@
       <option name="project" value="LOCAL" />
       <updated>1744707591372</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="plz help. V6.1">
+      <created>1744707721646</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1744707721646</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -244,7 +252,8 @@
     <MESSAGE value="plz help. V4" />
     <MESSAGE value="plz help. V5" />
     <MESSAGE value="plz help. V6" />
-    <option name="LAST_COMMIT_MESSAGE" value="plz help. V6" />
+    <MESSAGE value="plz help. V6.1" />
+    <option name="LAST_COMMIT_MESSAGE" value="plz help. V6.1" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -256,27 +265,27 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pages/8_print report.py</url>
-          <line>195</line>
+          <line>196</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pages/8_print report.py</url>
-          <line>187</line>
+          <line>188</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pages/8_print report.py</url>
-          <line>188</line>
+          <line>189</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pages/8_print report.py</url>
-          <line>180</line>
+          <line>181</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pages/8_print report.py</url>
-          <line>179</line>
+          <line>180</line>
           <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
