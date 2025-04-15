@@ -1,6 +1,5 @@
 import numpy as np
 import streamlit as st
-#m
 construction_types_solar = ("Light (with carpet 10%)",
     "Light (with carpet 50%)",
     "Light (with carpet 90%)",

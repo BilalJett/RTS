@@ -11,41 +11,43 @@ import tempfile
 import numpy as np
 
 #importing data
-try:
-    defualtuseless =pd.DataFrame()
-    for i in range(4):
-        if f"totalNO{i+1}" not in st.session_state:
-            st.session_state[f"totalNO{i+1}"] =defualtuseless
-        if f"datatempNO{i+1}" not in st.session_state:
-            st.session_state[f"datatempNO{i+1}"] =defualtuseless
-        if f"datadataNO{i+1}" not in st.session_state:
-            st.session_state[f"datadataNO{i+1}"] =defualtuseless
-        if f"dataqaNO{i+1}" not in st.session_state:
-            st.session_state[f"dataqaNO{i+1}"] =defualtuseless
-        if f"dataWNO{i+1}" not in st.session_state:
-            st.session_state[f"dataWNO{i+1}"] =defualtuseless
-    if "total_roomROOF" not in st.session_state:
-        st.session_state["total_roomROOF"] = defualtuseless
-    if "datatempROOF" not in st.session_state:
-        st.session_state["datatempROOF"] = defualtuseless
-    if "datadataROOF" not in st.session_state:
-        st.session_state["datadataROOF"] = defualtuseless
-    if "dataqaROOF" not in st.session_state:
-        st.session_state["dataqaROOF"] = defualtuseless
-    if "dataWROOF" not in st.session_state:
-        st.session_state["dataWROOF"] = defualtuseless
 
-    if "datalight" not in st.session_state:
-        st.session_state["datalight"] = defualtuseless
-    totaltotaltotal = np.array(np.nan_to_num(st.session_state["totalNO1"],nan=0)+
-              np.nan_to_num(st.session_state["totalNO2"],nan=0)+
-              np.nan_to_num(st.session_state["totalNO3"],nan=0)+
-              np.nan_to_num(st.session_state["totalNO4"],nan=0)+
-              np.nan_to_num(st.session_state["total_roomROOF"],nan=0)+
-              np.nan_to_num(st.session_state["datalight"],nan=0))
-    totaltotaltotal = totaltotaltotal[:, 0]
-    totaltotaltotal = pd.DataFrame(totaltotaltotal)
-except:st.write("Failed to make pdf report, Make sure you filled all the info in the previous page\n if you intend to leave some pages blank then just visit the page then leave it.")
+defualtuseless =pd.DataFrame()
+for i in range(4):
+    if f"totalNO{i+1}" not in st.session_state:
+        st.session_state[f"totalNO{i+1}"] =defualtuseless
+    if f"datatempNO{i+1}" not in st.session_state:
+        st.session_state[f"datatempNO{i+1}"] =defualtuseless
+    if f"datadataNO{i+1}" not in st.session_state:
+        st.session_state[f"datadataNO{i+1}"] =defualtuseless
+    if f"dataqaNO{i+1}" not in st.session_state:
+        st.session_state[f"dataqaNO{i+1}"] =defualtuseless
+    if f"dataWNO{i+1}" not in st.session_state:
+        st.session_state[f"dataWNO{i+1}"] =defualtuseless
+        print("Window is default (zero)")
+
+if "total_roomROOF" not in st.session_state:
+    st.session_state["total_roomROOF"] = defualtuseless
+if "datatempROOF" not in st.session_state:
+    st.session_state["datatempROOF"] = defualtuseless
+if "datadataROOF" not in st.session_state:
+    st.session_state["datadataROOF"] = defualtuseless
+if "dataqaROOF" not in st.session_state:
+    st.session_state["dataqaROOF"] = defualtuseless
+if "dataWROOF" not in st.session_state:
+    st.session_state["dataWROOF"] = defualtuseless
+
+if "datalight" not in st.session_state:
+    st.session_state["datalight"] = defualtuseless
+
+totaltotaltotal = np.array(np.nan_to_num(st.session_state["totalNO1"],nan=0)+
+          np.nan_to_num(st.session_state["totalNO2"],nan=0)+
+          np.nan_to_num(st.session_state["totalNO3"],nan=0)+
+          np.nan_to_num(st.session_state["totalNO4"],nan=0)+
+          np.nan_to_num(st.session_state["total_roomROOF"],nan=0)+
+          np.nan_to_num(st.session_state["datalight"],nan=0))
+totaltotaltotal = totaltotaltotal[:, 0]
+totaltotaltotal = pd.DataFrame(totaltotaltotal)
 
 #setting some functions
 def PandasToTable(dataframe):
@@ -173,10 +175,10 @@ def Addwalltopdf(num):
     layout.append(Paragraph(f"Wall #{num}", title_style))
     layout.append(HRFlowable(width="100%", thickness=1, color="black", spaceBefore=10, spaceAfter=10))
     layout.append(
-        Image(PandasToGraph(st.session_state[f"datatempNO1"], "T Hourly and T Solair", "Time", "Temperature"), width=350,
+        Image(PandasToGraph(st.session_state[f"datatempNO{num}"], f"T Hourly and T Solair for wall #{num}", "Time", "Temperature"), width=350,
               height=250))
     layout.append(Image(
-        PandasToGraph(st.session_state[f"dataqaNO{num}"], "Cooling load from wall", "Time", f"load {st.session_state.heat}"),
+        PandasToGraph(st.session_state[f"dataqaNO{num}"], f"Cooling load from wall #{num}", "Time", f"load {st.session_state.heat}"),
         width=350, height=250))
     layout.append(Spacer(10, 70))
     layout.append(HRFlowable(width="100%", thickness=1, color="black", spaceBefore=10, spaceAfter=10))
@@ -184,7 +186,7 @@ def Addwalltopdf(num):
     layout.append(Paragraph(f"Wall #{num}", title_style))
     layout.append(HRFlowable(width="100%", thickness=1, color="black", spaceBefore=10, spaceAfter=10))
     layout.append(Image(
-        PandasToGraph(st.session_state[f"dataWNO{num}"], "Cooling load from window", "Time", f"load {st.session_state.heat}"),
+        PandasToGraph(st.session_state[f"dataWNO{num}"], f"Cooling load from window #{num}", "Time", f"load {st.session_state.heat}"),
         width=350, height=250))
     layout.append(Image(PandasToGraph(st.session_state[f"totalNO{num}"], f"Total cooling load from wall #{num}", "Time",
                                       f"load {st.session_state.heat}"), width=350, height=250))

@@ -1,8 +1,8 @@
 import numpy as np
 import streamlit as st
 import pandas as pd
-defualtuseless =pd.DataFrame()
 
+defualtuseless =pd.DataFrame()
 for i in range(4):
     if f"totalNO{i+1}" not in st.session_state:
         st.session_state[f"totalNO{i+1}"] =defualtuseless
