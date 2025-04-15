@@ -207,7 +207,7 @@ def addrooftopdf():
     layout.append(Paragraph("Roof", title_style))
     layout.append(HRFlowable(width="100%", thickness=1, color="black", spaceBefore=10, spaceAfter=10))
     layout.append(
-        Image(PandasToGraph(st.session_state["datatempROOF"], "T Hourly and T Solair", "Time", "Temperature"),
+        Image(PandasToGraph(st.session_state["datatempROOF"], "T Hourly and T Solair on roof", "Time", "Temperature"),
               width=350,
               height=250))
     layout.append(Image(
@@ -220,7 +220,7 @@ def addrooftopdf():
     layout.append(Paragraph("Roof", title_style))
     layout.append(HRFlowable(width="100%", thickness=1, color="black", spaceBefore=10, spaceAfter=10))
     layout.append(Image(
-        PandasToGraph(st.session_state["dataWROOF"], "Cooling load from window", "Time",
+        PandasToGraph(st.session_state["dataWROOF"], "Cooling load from skylight", "Time",
                       f"load {st.session_state.heat}"),
         width=350, height=250))
     layout.append(Image(PandasToGraph(st.session_state["total_roomROOF"], f"Total cooling load from Roof", "Time",

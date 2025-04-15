@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="331c9e91-09e4-4c08-bb39-e254c476fc47" name="Changes" comment="plz help. V5">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/7_ Total Room Cooling Load.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/7_ Total Room Cooling Load.py" afterDir="false" />
+    <list default="true" id="331c9e91-09e4-4c08-bb39-e254c476fc47" name="Changes" comment="plz help. V6">
       <change beforePath="$PROJECT_DIR$/pages/8_print report.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/8_print report.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -218,7 +215,14 @@
       <option name="project" value="LOCAL" />
       <updated>1744530477263</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="plz help. V6">
+      <created>1744707591372</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1744707591372</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -239,7 +243,8 @@
     <MESSAGE value="plz help. V3" />
     <MESSAGE value="plz help. V4" />
     <MESSAGE value="plz help. V5" />
-    <option name="LAST_COMMIT_MESSAGE" value="plz help. V5" />
+    <MESSAGE value="plz help. V6" />
+    <option name="LAST_COMMIT_MESSAGE" value="plz help. V6" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -251,7 +256,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pages/8_print report.py</url>
-          <line>196</line>
+          <line>195</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
